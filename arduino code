@@ -1,0 +1,94 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial voice(8,9);
+//RELAY PIN
+#define IN1 2
+#define IN2 3
+#define IN3 4
+#define IN4 5
+
+byte com = 0;
+
+
+void setup() {
+// for voice recognithion module
+voice.begin(9600);
+
+voice.write(0xAA);
+
+voice.write(0x37);
+
+delay(1000);
+
+voice.write(0xAA);
+
+voice.write(0x21);
+//end of voice reconithation module
+
+pinMode(IN1,OUTPUT);
+pinMode(IN2,OUTPUT);
+pinMode(IN3,OUTPUT);
+pinMode(IN4,OUTPUT);
+
+digitalWrite(IN1,0);
+digitalWrite(IN2,0);
+digitalWrite(IN3,0);
+digitalWrite(IN4,0);
+}
+
+void loop() {
+
+  while(voice.available()) {
+
+  com = voice.read();
+
+  switch(com) {
+
+      case 0x11:   //command 1 is for TURN ON THE FIRST DEVICE
+
+          digitalWrite(IN1,1);
+
+      break;
+
+      case 0x12:  //command 2 is for TURN OFF THE FIRST DEVICE
+
+           digitalWrite(IN1,0);
+
+      break;
+
+      case 0x13:  //command 3 is  TURN ON THE SECONDE DEVICE
+
+            digitalWrite(IN2,1);
+
+      break;
+
+      case 0x14:  //command 4 is for  TURN OFF THE SECONDE DEVICE
+      
+            digitalWrite(IN2,0); 
+
+      break;
+
+      case 0x15:  //command 5 is for  TURN ON THE THIRD DEVICE
+      
+            digitalWrite(IN3,1);
+
+      break;
+      case 0x16:  //command 5 is for  TURN OFF THE THIRD DEVICE
+      
+            digitalWrite(IN3,0);
+
+      break;
+      case 0x17:  //command 5 is for  TURN ON THE FOURTH DEVICE
+      
+            digitalWrite(IN4,1);
+
+      break;
+      case 0x18:  //command 5 is for  TURN OFF THE FOURTH DEVICE
+   
+            digitalWrite(IN4,0);
+
+      break;
+
+            }
+      }
+}
